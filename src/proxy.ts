@@ -29,10 +29,18 @@ export async function proxy(request: NextRequest) {
     data: { user },
   } = await supabase.auth.getUser();
 
+  // Reachable while signed out: you can't sign in to recover a password you forgot.
+  const PUBLIC_ADMIN_PATHS = new Set([
+    "/admin/login",
+    "/admin/forgot-password",
+    "/admin/reset-password",
+  ]);
+
   const isLoginPage = request.nextUrl.pathname === "/admin/login";
+  const isPublicAdminPath = PUBLIC_ADMIN_PATHS.has(request.nextUrl.pathname);
   const isAdminRoute = request.nextUrl.pathname.startsWith("/admin");
 
-  if (isAdminRoute && !isLoginPage) {
+  if (isAdminRoute && !isPublicAdminPath) {
     if (!user) {
       const url = request.nextUrl.clone();
       url.pathname = "/admin/login";
