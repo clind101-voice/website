@@ -6,10 +6,10 @@ import { useState } from "react";
 
 const LINKS = [
   { href: "/", label: "Home" },
-  { href: "/about", label: "About Me" },
+  { href: "/voice-overs", label: "Voice Overs" },
   { href: "/singing", label: "Singing" },
   { href: "/acting", label: "Acting" },
-  { href: "/voice-overs", label: "Voice Overs" },
+  { href: "/about", label: "About Me" },
   { href: "/contact", label: "Contact" },
 ];
 
