@@ -7,7 +7,8 @@ const FIELDS: { key: string; label: string; multiline?: boolean }[] = [
   { key: "about_bio", label: "About Me — bio (separate paragraphs with a blank line)" },
   { key: "singing_intro", label: "Singing — section intro", multiline: false },
   { key: "acting_intro", label: "Acting — section intro", multiline: false },
-  { key: "voiceovers_intro", label: "Voice Overs — section intro", multiline: false },
+  { key: "voiceovers_role", label: "Voice Overs — role line (e.g. Voice-Over Artist)", multiline: false },
+  { key: "voiceovers_bio", label: "Voice Overs — short intro shown next to your photo" },
   { key: "contact_blurb", label: "Contact — page intro", multiline: false },
 ];
 
