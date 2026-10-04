@@ -3,7 +3,8 @@
 import { useState, type FormEvent } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { createClient } from "@/lib/supabase/client";
+import { createClient, isSupabaseConfigured } from "@/lib/supabase/client";
+import NotConfiguredNotice from "@/components/admin/NotConfiguredNotice";
 
 export default function AdminLoginPage() {
   const router = useRouter();
@@ -32,6 +33,9 @@ export default function AdminLoginPage() {
     router.push("/admin");
     router.refresh();
   }
+
+  // After the hooks, so the hook order never changes between renders.
+  if (!isSupabaseConfigured()) return <NotConfiguredNotice />;
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-neutral-100">

@@ -2,7 +2,8 @@
 
 import { useState, type FormEvent } from "react";
 import Link from "next/link";
-import { createClient } from "@/lib/supabase/client";
+import { createClient, isSupabaseConfigured } from "@/lib/supabase/client";
+import NotConfiguredNotice from "@/components/admin/NotConfiguredNotice";
 
 export default function ForgotPasswordPage() {
   const supabase = createClient();
@@ -23,6 +24,9 @@ export default function ForgotPasswordPage() {
     setLoading(false);
     setSent(true);
   }
+
+  // After the hooks, so the hook order never changes between renders.
+  if (!isSupabaseConfigured()) return <NotConfiguredNotice />;
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-neutral-100 px-4 py-10">
