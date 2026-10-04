@@ -17,10 +17,15 @@ export type MediaItem = {
 const BUCKET = "media";
 
 export async function getContentBlocks(): Promise<Record<string, string>> {
-  const supabase = await createClient();
-  const { data } = await supabase.from("content_blocks").select("key, value");
   const map: Record<string, string> = {};
-  for (const row of data ?? []) map[row.key] = row.value;
+  try {
+    const supabase = await createClient();
+    const { data } = await supabase.from("content_blocks").select("key, value");
+    for (const row of data ?? []) map[row.key] = row.value;
+  } catch {
+    // Unreachable database (misconfigured deployment, outage). Callers each
+    // pass a sensible fallback, so the page still renders its default copy.
+  }
   return map;
 }
 
@@ -30,13 +35,19 @@ export async function getContentBlock(key: string, fallback = ""): Promise<strin
 }
 
 export async function getMediaForSection(section: MediaSection): Promise<MediaItem[]> {
-  const supabase = await createClient();
-  const { data } = await supabase
-    .from("media_items")
-    .select("*")
-    .eq("section", section)
-    .order("sort_order", { ascending: true });
-  return data ?? [];
+  try {
+    const supabase = await createClient();
+    const { data } = await supabase
+      .from("media_items")
+      .select("*")
+      .eq("section", section)
+      .order("sort_order", { ascending: true });
+    return data ?? [];
+  } catch {
+    // See getContentBlocks: an unreachable database degrades to "no media"
+    // rather than taking the page down.
+    return [];
+  }
 }
 
 export function publicMediaUrl(storagePath: string): string {
