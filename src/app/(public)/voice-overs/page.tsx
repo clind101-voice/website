@@ -5,6 +5,7 @@ import { getContentBlock, getMediaForSection } from "@/lib/content";
 import YouTubeFacade from "@/components/public/YouTubeFacade";
 import PastWorksTimeline, { type PastWork } from "@/components/public/PastWorksTimeline";
 import { PAST_WORKS } from "@/lib/past-works";
+import { BUILT_IN_VOICE_OVER_SAMPLES } from "@/lib/voice-over-samples";
 
 export const metadata: Metadata = {
   title: "Voice Overs | Cote Lind, Chicago Voice-Over Artist",
@@ -28,7 +29,7 @@ export default async function VoiceOversPage() {
   ]);
 
   const videos = media.filter((m) => m.type === "video_embed" && m.external_url);
-  const samples: PastWork[] = media
+  const uploaded: PastWork[] = media
     .filter((m) => m.type === "audio" && m.storage_path)
     .map((m) => ({
       year: "",
@@ -36,6 +37,10 @@ export default async function VoiceOversPage() {
       category: "Voice-over sample",
       audioUrl: publicUrl(m.storage_path!),
     }));
+
+  // Cote's uploads always win. The committed samples only stand in while the
+  // voice-overs section has no audio of its own.
+  const samples = uploaded.length > 0 ? uploaded : BUILT_IN_VOICE_OVER_SAMPLES;
 
   const timeline: PastWork[] = [...samples, ...PAST_WORKS];
 
