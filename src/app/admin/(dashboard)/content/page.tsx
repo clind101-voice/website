@@ -7,8 +7,12 @@ const FIELDS: { key: string; label: string; multiline?: boolean }[] = [
   { key: "about_bio", label: "About Me — bio (separate paragraphs with a blank line)" },
   { key: "singing_intro", label: "Singing — section intro", multiline: false },
   { key: "acting_intro", label: "Acting — section intro", multiline: false },
+  { key: "voiceovers_heading", label: "Voice Overs — big heading at the top of the page", multiline: false },
+  { key: "voiceovers_location", label: "Voice Overs — location line (e.g. Chicago, USA)", multiline: false },
   { key: "voiceovers_role", label: "Voice Overs — role line (e.g. Voice-Over Artist)", multiline: false },
   { key: "voiceovers_bio", label: "Voice Overs — short intro shown next to your photo" },
+  { key: "voiceovers_cta", label: "Voice Overs — booking button text", multiline: false },
+  { key: "voiceovers_works_heading", label: "Voice Overs — heading above your samples and credits", multiline: false },
   { key: "contact_blurb", label: "Contact — page intro", multiline: false },
 ];
 
