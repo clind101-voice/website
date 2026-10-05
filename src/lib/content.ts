@@ -31,7 +31,10 @@ export async function getContentBlocks(): Promise<Record<string, string>> {
 
 export async function getContentBlock(key: string, fallback = ""): Promise<string> {
   const blocks = await getContentBlocks();
-  return blocks[key] ?? fallback;
+  // `||`, not `??`: a block cleared to "" in the admin means "I haven't set
+  // this", same as a block that was never created. Honouring the empty string
+  // would render a blank heading with nothing on screen to explain why.
+  return blocks[key] || fallback;
 }
 
 export async function getMediaForSection(section: MediaSection): Promise<MediaItem[]> {

@@ -10,7 +10,13 @@ export type PastWork = {
   audioUrl?: string;
 };
 
-export default function PastWorksTimeline({ items }: { items: PastWork[] }) {
+export default function PastWorksTimeline({
+  items,
+  heading = "Past Works",
+}: {
+  items: PastWork[];
+  heading?: string;
+}) {
   const trackRef = useRef<HTMLDivElement>(null);
   const dialogRef = useRef<HTMLDivElement>(null);
   const [canLeft, setCanLeft] = useState(false);
@@ -69,7 +75,7 @@ export default function PastWorksTimeline({ items }: { items: PastWork[] }) {
     <section className="mt-20">
       <div className="mb-8 flex items-center justify-between gap-4">
         <h2 className="font-display text-3xl uppercase tracking-[0.12em] text-white sm:text-4xl">
-          Past Works
+          {heading}
         </h2>
         <div className="flex shrink-0 gap-2">
           <button

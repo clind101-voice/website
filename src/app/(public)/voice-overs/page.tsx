@@ -18,13 +18,17 @@ function publicUrl(storagePath: string) {
 }
 
 export default async function VoiceOversPage() {
-  const [tagline, bio, media] = await Promise.all([
+  const [heading, location, tagline, bio, cta, worksHeading, media] = await Promise.all([
+    getContentBlock("voiceovers_heading", "Cote Lind"),
+    getContentBlock("voiceovers_location", "Chicago, USA"),
     getContentBlock("voiceovers_role", "Voice-Over Artist"),
     getContentBlock(
       "voiceovers_bio",
       "Chicago-based voice-over artist with a background in live theatre and song. " +
         "Commercials, narration, e-learning and character work, recorded and delivered from my own booth."
     ),
+    getContentBlock("voiceovers_cta", "Book Cote Lind"),
+    getContentBlock("voiceovers_works_heading", "Past Works"),
     getMediaForSection("voiceovers"),
   ]);
 
@@ -50,10 +54,10 @@ export default async function VoiceOversPage() {
         <div className="grid items-center gap-10 md:grid-cols-2">
           <div>
             <h1 className="font-display text-5xl uppercase tracking-[0.08em] text-white sm:text-6xl">
-              Cote Lind
+              {heading}
             </h1>
             <p className="mt-3 text-xs font-semibold uppercase tracking-[0.2em] text-[var(--blue)]">
-              Chicago, USA <span className="mx-2 text-white/30">|</span> {tagline}
+              {location} <span className="mx-2 text-white/30">|</span> {tagline}
             </p>
 
             <hr className="my-6 border-white/15" />
@@ -64,7 +68,7 @@ export default async function VoiceOversPage() {
               href="/contact"
               className="mt-7 inline-flex items-center gap-3 rounded-sm bg-[var(--blue)] px-6 py-3 font-semibold uppercase tracking-wide text-white transition-opacity hover:opacity-90"
             >
-              Book Cote Lind <span aria-hidden="true">→</span>
+              {cta} <span aria-hidden="true">→</span>
             </Link>
           </div>
 
@@ -92,7 +96,7 @@ export default async function VoiceOversPage() {
           </div>
         )}
 
-        <PastWorksTimeline items={timeline} />
+        <PastWorksTimeline items={timeline} heading={worksHeading} />
       </div>
     </div>
   );
