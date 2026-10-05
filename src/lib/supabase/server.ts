@@ -10,8 +10,8 @@ export async function createClient() {
   // Supabase keys should still serve the public pages (which fall back to their
   // default copy) rather than returning a 500 on every route.
   return createServerClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL ?? "https://placeholder.supabase.co",
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ?? "placeholder-anon-key",
+    process.env.NEXT_PUBLIC_SUPABASE_URL || "https://placeholder.supabase.co",
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || "placeholder-anon-key",
     {
       cookies: {
         getAll() {

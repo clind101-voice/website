@@ -84,3 +84,45 @@ Push to a git repo and import it into [Vercel](https://vercel.com/new). Add the 
 environment variables from `.env.local` in the Vercel project settings. Until the
 domain is repointed, the site is reachable at its `*.vercel.app` URL; DNS cutover to
 `cotelind.me` happens separately, when Cote signs off on the new site.
+
+`vercel.json` pins the framework preset to `nextjs`. Leave it there. If the preset is
+`Other`, Vercel publishes `public/` as a plain static site and never runs the app: the
+build goes green, static files like `/file.svg` still return 200, and every real route
+returns Vercel's own `NOT_FOUND` page. A successful build is not evidence the site is
+being served.
+
+### Environment variables are exact names, not labels
+
+The app reads these five and nothing else:
+
+| Name | Needed by |
+| --- | --- |
+| `NEXT_PUBLIC_SUPABASE_URL` | browser + server |
+| `NEXT_PUBLIC_SUPABASE_ANON_KEY` | browser + server |
+| `SUPABASE_SERVICE_ROLE_KEY` | server only |
+| `RESEND_API_KEY` | server only |
+| `CONTACT_NOTIFY_EMAIL` | server only |
+
+Naming them after Supabase's dashboard labels (`ANON_PUBLIC`, `SERVICE_ROLE`) does
+nothing — those are never read. The `NEXT_PUBLIC_` prefix is also not cosmetic: it is
+what inlines a value into the browser bundle. `src/components/admin/LogoutButton.tsx`
+is a client component that builds a Supabase client, so dropping the prefix leaves it
+with no credentials at all.
+
+`NEXT_PUBLIC_*` values are baked in at **build** time, so changing one has no effect
+until you redeploy. Apply all five to Production, Preview *and* Development.
+
+### If the admin login rejects a valid user
+
+There is no trigger on `auth.users`. `public.profiles` is written only by
+`scripts/seed-admins.mjs`, which creates the auth user and its profile row together.
+A user created by hand in the Supabase dashboard therefore has no profile row and no
+admin rights. Insert one:
+
+```sql
+insert into public.profiles (id, display_name, is_admin)
+values ('<the auth.users id>', '<display name>', true)
+on conflict (id) do update set is_admin = true;
+```
+
+`display_name` is `not null`, so it must be supplied.
