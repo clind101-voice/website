@@ -18,7 +18,7 @@ export function createClient() {
   // keys to render. A well-formed placeholder keeps the build alive; callers
   // check isSupabaseConfigured() and surface a clear message instead.
   return createBrowserClient(
-    url ?? "https://placeholder.supabase.co",
-    anonKey ?? "placeholder-anon-key"
+    url || "https://placeholder.supabase.co",
+    anonKey || "placeholder-anon-key"
   );
 }
